@@ -1,0 +1,172 @@
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <sstream>
+#include <map>
+
+using namespace std;
+
+class Text
+{
+private:
+	string text;
+	int sentence = 0;
+	int vowel = 0;
+	int consonant = 0;
+	int letter = 0;
+
+public:
+    Text()
+    {
+	    sentence = 0;
+		vowel = 0;
+		letter = 0;
+		text = " ";
+    }
+
+    int getSentence()
+    {
+        return sentence;
+    }
+    int getVowel()
+    {
+        return vowel;
+    }
+	int getLetter()
+	{
+	    return letter;
+	}
+	string getText()
+	{
+	    return text;
+    }
+
+
+public:
+    int countSentences(string text)
+	{
+		for (int i = 0; i <= text.length(); i++)
+		{
+
+			if (text[i] == '.' || text[i] == '?' || text[i] == '!')
+			{
+				sentence++;
+			}
+		}
+		return sentence;
+	}
+
+public:
+    int countWords(string text)
+	{
+		int count = 1;
+		for (int i = 0; i < text.length() - 1; i++)
+		{
+			if (text[i] == ' ' && text[i + 1] != ' ')
+			{
+				count++;
+			}
+		}
+		return count;
+	}
+
+public:
+    int countLetters(string text)
+	{
+		for (int i = 0; i < text.length(); i++)
+		{
+			if (isalpha(text[i]))
+			{
+				letter++;
+			}
+		}
+		return letter;
+	}
+
+
+public:
+    int countVowels(string text)
+	{
+	    int vowel = 0;
+		for (int i = 0; i < text.length(); i++)
+		{
+			if (text[i] == 'A' || text[i] == 'a' || text[i] == 'E' || text[i] == 'e' || text[i] == 'I' || text[i] == 'i' || text[i] == 'O' || text[i] == 'o' || text[i] == 'U' || text[i] == 'u')
+			{
+				++vowel;
+			}
+		}
+		return vowel;
+	}
+
+public:
+    int countConsonants(string text)
+	{
+	    int consonant = 0;
+	    for (int i = 0; i < text.length(); i++)
+		{
+			if (isalpha(text[i]) && text[i] != 'A' && text[i] != 'a' && text[i] != 'E' && text[i] != 'e' && text[i] != 'I' && text[i] != 'i' && text[i] != 'O' && text[i] != 'o' && text[i] != 'U' && text[i] != 'u')
+			{
+				++consonant;
+			}
+		}
+		return consonant;
+
+	}
+
+public:
+    string getFrequent(string text)
+    {
+        istringstream is(text);
+        map<string, int> count;
+	    string word;
+	    decltype(count)::const_iterator most_common;
+	    while (is >> word)
+	    {
+	        auto iterator = count.emplace(word, 0).first;
+		    ++iterator->second;
+		    if (count.size() == 1 || iterator->second > most_common->second)
+                most_common = iterator;
+	    }
+	    return  most_common->first;
+    }
+
+public:
+    string getLongest(string text)
+    {
+        string::size_type max_size;
+        string max_word;
+	    string word;
+	    istringstream is(text);
+	    max_size = 0;
+        while (is >> word)
+	    {
+	        if (max_size < word.size())
+		    {
+                max_size = word.size();
+			    max_word = word;
+		    }
+		    else if (max_size == word.size())
+		    {
+			    max_word += "; ";
+			    max_word += word;
+		    }
+        }
+	    return max_word ;
+    }
+
+};
+
+int main()
+{
+	Text text;
+	string str;
+	cout << "\tIntroduceti textul: ";
+	getline(cin, str);
+	cout << "\n\tNumarul de propozitii in text:" << text.countSentences(str) << "\n";
+	cout << "\tNumarul de cuvinte:" << text.countWords(str) << "\n";
+	cout << "\tNumarul de litere: " << text.countLetters(str) << "\n";
+	cout << "\tNumarul de vocale: " << text.countVowels(str) << "\n";
+	cout << "\tNumarul de consoane: " << text.countConsonants(str) << "\n";
+	cout << "\tCuvantul cel mai frecvent din text: " << text.getFrequent(str) << "\n";;
+	cout << "\tCuvantul cel mai lung din text: " << text.getLongest(str) << "\n" <<endl;
+}
